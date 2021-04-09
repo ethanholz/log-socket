@@ -4,10 +4,15 @@ import (
 	"testing"
 )
 
+func TestCreateDestroy(t *testing.T) {
+	c := CreateClient()
+	c.Destroy()
+}
+
 // SetLogLevel set log level of logger
 func TestSetLogLevel(t *testing.T) {
 	logLevels := [...]Level{LTrace, LDebug, LInfo, LWarn, LError, LPanic, LFatal}
-	var c Client
+	c := CreateClient()
 	for _, x := range logLevels {
 		c.SetLogLevel(x)
 		if c.GetLogLevel() != x {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"runtime"
 	"strings"
+	"sync"
 
 	"github.com/sirupsen/logrus"
 )
@@ -21,7 +22,8 @@ const (
 )
 
 var logger = logrus.New()
-var clients []Client
+var clients []*Client
+var sliceTex sync.Mutex
 
 func init() {
 	stderrClient := CreateClient()
@@ -30,22 +32,40 @@ func init() {
 }
 
 func (c *Client) logStdErr() {
-	select {
-	case entry := <-c.writer:
-		if c.LogLevel >= entry.level {
-			fmt.Println(entry.Output)
+	for {
+		select {
+		case entry, more := <-c.writer:
+			if c.LogLevel >= entry.level {
+				fmt.Println(entry.Output)
+			}
+			if !more {
+				return
+			}
 		}
 	}
 }
 
 func CreateClient() *Client {
 	var client Client
-	client.writer = make(LogWriter, 10)
-	clients = append(clients, client)
+	client.writer = make(LogWriter, 100)
+	sliceTex.Lock()
+	clients = append(clients, &client)
+	sliceTex.Unlock()
 	return &client
 }
 
 func (c *Client) Destroy() error {
+	var otherClients []*Client
+	sliceTex.Lock()
+	c.writer = nil
+	c = nil
+	for _, x := range clients {
+		if x != nil {
+			otherClients = append(otherClients, x)
+		}
+	}
+	clients = otherClients
+	sliceTex.Unlock()
 	return nil
 }
 
@@ -54,11 +74,16 @@ func (c *Client) GetLogLevel() Level {
 }
 
 func createLog(e Entry) {
+	sliceTex.Lock()
 	for _, c := range clients {
-		go func(c Client, e Entry) {
-			c.writer <- e
+		go func(c *Client, e Entry) {
+			select {
+			case c.writer <- e:
+			default:
+			}
 		}(c, e)
 	}
+	sliceTex.Unlock()
 }
 
 // SetLogLevel set log level of logger
