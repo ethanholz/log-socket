@@ -1,17 +1,23 @@
 package lambo_log_socket
 
 import (
+	"strconv"
+	"sync"
 	"testing"
 )
 
+// Test CreateClient() and Client.Destroy()
 func TestCreateDestroy(t *testing.T) {
+	// Ensure only stderr exists at the beginning
 	if len(clients) != 1 {
 		t.Errorf("Expected 1 client, but found %d", len(clients))
 	}
+	// Create a new client, ensure it's added
 	c := CreateClient()
 	if len(clients) != 2 {
 		t.Errorf("Expected 2 clients, but found %d", len(clients))
 	}
+	// Destroy it and ensure it's actually removed from the array
 	c.Destroy()
 	if len(clients) != 1 {
 		t.Errorf("Expected 1 client, but found %d", len(clients))
@@ -31,18 +37,31 @@ func TestSetLogLevel(t *testing.T) {
 	c.Destroy()
 }
 
-// Trace prints out logs on trace level
-func TestTrace(t *testing.T) {
-	testString := "Testing trace!"
+func BenchmarkDebugSerial(b *testing.B) {
+	c := CreateClient()
+	var x sync.WaitGroup
+	x.Add(b.N)
+	for i := 0; i < b.N; i++ {
+		Debug(i)
+		go func() {
+			c.Get()
+			x.Done()
+		}()
+	}
+	x.Wait()
+	c.Destroy()
+}
+
+// Trace ensure logs come out in the right order
+func TestOrder(t *testing.T) {
+	testString := "Testing trace: "
 	var c *Client
 	c = CreateClient()
 	c.SetLogLevel(LTrace)
 
-	for i := 0; i < 5; i++ {
-		Trace(testString)
-	}
-	for i := 0; i < 5; i++ {
-		if testString != c.Get().Output {
+	for i := 0; i < 5000; i++ {
+		Trace(testString + strconv.Itoa(i))
+		if testString+strconv.Itoa(i) != c.Get().Output {
 			t.Error("Trace input doesn't match output")
 		}
 	}

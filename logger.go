@@ -55,7 +55,7 @@ func (c *Client) logStdErr() {
 func CreateClient() *Client {
 	var client Client
 	client.initialized = true
-	client.writer = make(LogWriter, 100)
+	client.writer = make(LogWriter, 1000)
 	sliceTex.Lock()
 	clients = append(clients, &client)
 	sliceTex.Unlock()
@@ -66,6 +66,7 @@ func Flush() {
 	cleanup.Do(func() {
 		close(stderrClient.writer)
 		<-stderrFinished
+		stderrClient.Destroy()
 	})
 }
 
@@ -100,7 +101,13 @@ func createLog(e Entry) {
 		func(c *Client, e Entry) {
 			select {
 			case c.writer <- e:
+				// try to clear out one of the older entries
 			default:
+				select {
+				case <-c.writer:
+					c.writer <- e
+				default:
+				}
 			}
 		}(c, e)
 	}
@@ -210,6 +217,7 @@ func Panic(args ...interface{}) {
 			// falls through to default below
 		}
 	}
+	Flush()
 	panic(errors.New(output))
 }
 
@@ -224,6 +232,7 @@ func Fatal(args ...interface{}) {
 		level:     LFatal,
 	}
 	createLog(e)
+	Flush()
 	os.Exit(1)
 }
 
