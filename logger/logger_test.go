@@ -1,4 +1,4 @@
-package lambo_log_socket
+package logger
 
 import (
 	"strconv"

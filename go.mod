@@ -1,5 +1,5 @@
-module bitbucket.org/cellg/lambo-log-socket
+module github.com/taigrr/log-socket
 
 go 1.16
 
-require github.com/sirupsen/logrus v1.8.1
+require github.com/gorilla/websocket v1.4.2

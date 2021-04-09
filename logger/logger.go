@@ -1,4 +1,4 @@
-package lambo_log_socket
+package logger
 
 import (
 	"errors"
@@ -9,8 +9,6 @@ import (
 	"sync"
 	"time"
 )
-
-type Level int
 
 const (
 	LTrace Level = iota

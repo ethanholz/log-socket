@@ -1,8 +1,9 @@
-package lambo_log_socket
+package logger
 
 import "time"
 
 type LogWriter chan Entry
+type Level int
 
 type Client struct {
 	LogLevel    Level `json:"level"`
