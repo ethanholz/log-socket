@@ -112,6 +112,10 @@ func createLog(e Entry) {
 	sliceTex.Unlock()
 }
 
+func SetLogLevel(level Level) {
+	stderrClient.LogLevel = level
+}
+
 // SetLogLevel set log level of logger
 func (c *Client) SetLogLevel(level Level) {
 	if !c.initialized {
