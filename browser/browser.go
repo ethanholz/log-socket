@@ -3,10 +3,13 @@ package browser
 import (
 	"html/template"
 	"net/http"
+	"strings"
 )
 
 func LogSocketViewHandler(w http.ResponseWriter, r *http.Request) {
-	homeTemplate.Execute(w, "ws://"+r.Host+r.URL.Path+"/ws")
+	wsResource := "ws://" + r.Host + r.URL.Path
+	wsResource = strings.TrimSuffix(wsResource, "/") + "/ws"
+	homeTemplate.Execute(w, wsResource)
 }
 
 var homeTemplate = template.Must(template.New("").Parse(`
@@ -18,6 +21,7 @@ var homeTemplate = template.Must(template.New("").Parse(`
 <body>
 <center>
 <input type="text" id="search" onkeyup="filterTable()" placeholder="Filter...">
+<input type="checkbox" id="shouldScroll" checked>Enable Autoscroll<br>
 <table id="logHeaders" style="text-align:left; width:80%;" >
 <tbody>
 <tr class="header">
@@ -183,6 +187,14 @@ function filterTable() {
 
 	}
 }
+function pageScroll() {
+	if (document.getElementById('shouldScroll').checked) {
+		document.getElementById('tableWrapper').scrollBy(0,10);
+
+	}
+	setTimeout(pageScroll,10);
+}
+
 document.getElementById("delete").addEventListener("click", function(){
 
 	clearTable()
@@ -192,6 +204,7 @@ document.getElementById("download").addEventListener("click", function(){
 	download(application+'.json',JSON.stringify(logs));
 }, false);
 openSocket();
+pageScroll();
 </script>
 
 </footer>
