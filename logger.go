@@ -54,6 +54,7 @@ func (c *Client) logStdErr() {
 
 func CreateClient() *Client {
 	var client Client
+	client.initialized = true
 	client.writer = make(LogWriter, 100)
 	sliceTex.Lock()
 	clients = append(clients, &client)
@@ -70,11 +71,14 @@ func Flush() {
 
 func (c *Client) Destroy() error {
 	var otherClients []*Client
+	if !c.initialized {
+		panic(errors.New("Cannot delete uninitialized client, did you use CreateClient?"))
+	}
 	sliceTex.Lock()
 	c.writer = nil
-	c = nil
+	c.initialized = false
 	for _, x := range clients {
-		if x != nil {
+		if x.initialized {
 			otherClients = append(otherClients, x)
 		}
 	}
@@ -84,6 +88,9 @@ func (c *Client) Destroy() error {
 }
 
 func (c *Client) GetLogLevel() Level {
+	if !c.initialized {
+		panic(errors.New("Cannot get level for uninitialized client, use CreateClient instead"))
+	}
 	return c.LogLevel
 }
 
@@ -102,7 +109,17 @@ func createLog(e Entry) {
 
 // SetLogLevel set log level of logger
 func (c *Client) SetLogLevel(level Level) {
+	if !c.initialized {
+		panic(errors.New("Cannot set level for uninitialized client, use CreateClient instead"))
+	}
 	c.LogLevel = level
+}
+
+func (c *Client) Get() Entry {
+	if !c.initialized {
+		panic(errors.New("Cannot get logs for uninitialized client, did you use CreateClient?"))
+	}
+	return <-c.writer
 }
 
 // Trace prints out logs on trace level

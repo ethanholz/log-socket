@@ -5,8 +5,17 @@ import (
 )
 
 func TestCreateDestroy(t *testing.T) {
+	if len(clients) != 1 {
+		t.Errorf("Expected 1 client, but found %d", len(clients))
+	}
 	c := CreateClient()
+	if len(clients) != 2 {
+		t.Errorf("Expected 2 clients, but found %d", len(clients))
+	}
 	c.Destroy()
+	if len(clients) != 1 {
+		t.Errorf("Expected 1 client, but found %d", len(clients))
+	}
 }
 
 // SetLogLevel set log level of logger
@@ -19,18 +28,24 @@ func TestSetLogLevel(t *testing.T) {
 			t.Errorf("Got logLevel %d, but expected %d", int(c.GetLogLevel()), int(x))
 		}
 	}
+	c.Destroy()
 }
 
 // Trace prints out logs on trace level
 func TestTrace(t *testing.T) {
-	var c Client
+	testString := "Testing trace!"
+	var c *Client
+	c = CreateClient()
 	c.SetLogLevel(LTrace)
-	Trace("Testing trace!")
-	Trace("Testing trace!")
-	Trace("Testing trace!")
-	Trace("Testing trace!")
-	Trace("Testing trace!")
 
+	for i := 0; i < 5; i++ {
+		Trace(testString)
+	}
+	for i := 0; i < 5; i++ {
+		if testString != c.Get().Output {
+			t.Error("Trace input doesn't match output")
+		}
+	}
 }
 
 // Debug prints out logs on debug level

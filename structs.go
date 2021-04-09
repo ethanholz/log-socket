@@ -5,8 +5,9 @@ import "time"
 type LogWriter chan Entry
 
 type Client struct {
-	LogLevel Level `json:"level"`
-	writer   LogWriter
+	LogLevel    Level `json:"level"`
+	writer      LogWriter
+	initialized bool
 }
 
 type Entry struct {
