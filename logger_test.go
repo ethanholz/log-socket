@@ -25,15 +25,17 @@ func TestSetLogLevel(t *testing.T) {
 func TestTrace(t *testing.T) {
 	var c Client
 	c.SetLogLevel(LTrace)
-	//	if logLevel >= LTrace {
-	//		entry := logger.WithFields(logrus.Fields{})
-	//		entry.Data["file"] = fileInfo(2)
-	//		entry.Debug(args...)
-	//	}
+	Trace("Testing trace!")
+	Trace("Testing trace!")
+	Trace("Testing trace!")
+	Trace("Testing trace!")
+	Trace("Testing trace!")
+
 }
 
 // Debug prints out logs on debug level
 func TestDebug(t *testing.T) {
+	Debug("Test of Debug")
 	//	if logLevel >= LDebug {
 	//		entry := logger.WithFields(logrus.Fields{})
 	//		entry.Data["file"] = fileInfo(2)
@@ -84,4 +86,7 @@ func TestPanic(t *testing.T) {
 	//		entry.Data["file"] = fileInfo(2)
 	//		entry.Panic(args...)
 	//	}
+}
+func TestFlush(t *testing.T) {
+	defer Flush()
 }

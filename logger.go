@@ -1,12 +1,13 @@
 package lambo_log_socket
 
 import (
+	"errors"
 	"fmt"
+	"os"
 	"runtime"
 	"strings"
 	"sync"
-
-	"github.com/sirupsen/logrus"
+	"time"
 )
 
 type Level int
@@ -21,24 +22,30 @@ const (
 	LFatal
 )
 
-var logger = logrus.New()
-var clients []*Client
-var sliceTex sync.Mutex
+var (
+	clients        []*Client
+	sliceTex       sync.Mutex
+	stderrClient   *Client
+	cleanup        sync.Once
+	stderrFinished chan bool
+)
 
 func init() {
-	stderrClient := CreateClient()
+	stderrClient = CreateClient()
+	stderrClient.SetLogLevel(LTrace)
+	stderrFinished = make(chan bool, 1)
 	go stderrClient.logStdErr()
-	logger.SetLevel(logrus.DebugLevel)
 }
 
 func (c *Client) logStdErr() {
 	for {
 		select {
-		case entry, more := <-c.writer:
-			if c.LogLevel >= entry.level {
-				fmt.Println(entry.Output)
+		case e, more := <-c.writer:
+			if e.level >= c.LogLevel {
+				fmt.Fprintf(os.Stderr, "%s\t%s\t%s\t%s\n", e.Timestamp.String(), e.Level, e.Output, e.File)
 			}
 			if !more {
+				stderrFinished <- true
 				return
 			}
 		}
@@ -52,6 +59,13 @@ func CreateClient() *Client {
 	clients = append(clients, &client)
 	sliceTex.Unlock()
 	return &client
+}
+
+func Flush() {
+	cleanup.Do(func() {
+		close(stderrClient.writer)
+		<-stderrFinished
+	})
 }
 
 func (c *Client) Destroy() error {
@@ -76,7 +90,7 @@ func (c *Client) GetLogLevel() Level {
 func createLog(e Entry) {
 	sliceTex.Lock()
 	for _, c := range clients {
-		go func(c *Client, e Entry) {
+		func(c *Client, e Entry) {
 			select {
 			case c.writer <- e:
 			default:
@@ -93,51 +107,107 @@ func (c *Client) SetLogLevel(level Level) {
 
 // Trace prints out logs on trace level
 func Trace(args ...interface{}) {
-	entry := logger.WithFields(logrus.Fields{})
-	entry.Data["file"] = fileInfo(2)
-	entry.Debug(args...)
+	output := fmt.Sprint(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "TRACE",
+		level:     LTrace,
+	}
+	createLog(e)
+	//	entry := logger.WithFields(logrus.Fields{})
+	//	entry.Data["file"] = fileInfo(2)
+	//	entry.Debug(args...)
 }
 
 // Debug prints out logs on debug level
 func Debug(args ...interface{}) {
-	entry := logger.WithFields(logrus.Fields{})
-	entry.Data["file"] = fileInfo(2)
-	entry.Debug(args...)
+	output := fmt.Sprint(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "DEBUG",
+		level:     LDebug,
+	}
+	createLog(e)
+
 }
 
 // Info prints out logs on info level
 func Info(args ...interface{}) {
-	entry := logger.WithFields(logrus.Fields{})
-	entry.Data["file"] = fileInfo(2)
-	entry.Info(args...)
+	output := fmt.Sprint(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "INFO",
+		level:     LInfo,
+	}
+	createLog(e)
 }
 
 // Warn prints out logs on warn level
 func Warn(args ...interface{}) {
-	entry := logger.WithFields(logrus.Fields{})
-	entry.Data["file"] = fileInfo(2)
-	entry.Warn(args...)
+	output := fmt.Sprint(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "WARN",
+		level:     LWarn,
+	}
+	createLog(e)
 }
 
 // Error prints out logs on error level
 func Error(args ...interface{}) {
-	entry := logger.WithFields(logrus.Fields{})
-	entry.Data["file"] = fileInfo(2)
-	entry.Error(args...)
-}
-
-// Fatal prints out logs on fatal level
-func Fatal(args ...interface{}) {
-	entry := logger.WithFields(logrus.Fields{})
-	entry.Data["file"] = fileInfo(2)
-	entry.Fatal(args...)
+	output := fmt.Sprint(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "ERROR",
+		level:     LError,
+	}
+	createLog(e)
 }
 
 // Panic prints out logs on panic level
 func Panic(args ...interface{}) {
-	entry := logger.WithFields(logrus.Fields{})
-	entry.Data["file"] = fileInfo(2)
-	entry.Panic(args...)
+	output := fmt.Sprint(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "PANIC",
+		level:     LPanic,
+	}
+	createLog(e)
+	if len(args) >= 0 {
+		switch args[0].(type) {
+		case error:
+			panic(args[0])
+		default:
+			// falls through to default below
+		}
+	}
+	panic(errors.New(output))
+}
+
+// Fatal prints out logs on fatal level
+func Fatal(args ...interface{}) {
+	output := fmt.Sprint(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "FATAL",
+		level:     LFatal,
+	}
+	createLog(e)
+	os.Exit(1)
 }
 
 // fileInfo for getting which line in which file

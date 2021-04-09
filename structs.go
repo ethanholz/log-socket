@@ -1,5 +1,7 @@
 package lambo_log_socket
 
+import "time"
+
 type LogWriter chan Entry
 
 type Client struct {
@@ -8,8 +10,9 @@ type Client struct {
 }
 
 type Entry struct {
-	Timestamp string `json:"timestamp"`
-	Output    string `json:"output"`
-	Level     string `json:"level"`
+	Timestamp time.Time `json:"timestamp"`
+	Output    string    `json:"output"`
+	File      string    `json:"file"`
+	Level     string    `json:"level"`
 	level     Level
 }
