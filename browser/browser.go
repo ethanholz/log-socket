@@ -6,7 +6,7 @@ import (
 )
 
 func LogSocketViewHandler(w http.ResponseWriter, r *http.Request) {
-	homeTemplate.Execute(w, "ws://"+r.Host+"/logs")
+	homeTemplate.Execute(w, "ws://"+r.Host+r.URL.Path+"/ws")
 }
 
 var homeTemplate = template.Must(template.New("").Parse(`
