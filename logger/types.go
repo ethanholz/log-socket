@@ -5,6 +5,16 @@ import "time"
 type LogWriter chan Entry
 type Level int
 
+const (
+	LTrace Level = iota
+	LDebug
+	LInfo
+	LWarn
+	LError
+	LPanic
+	LFatal
+)
+
 type Client struct {
 	LogLevel    Level `json:"level"`
 	writer      LogWriter

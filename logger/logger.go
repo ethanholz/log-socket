@@ -10,16 +10,6 @@ import (
 	"time"
 )
 
-const (
-	LTrace Level = iota
-	LDebug
-	LInfo
-	LWarn
-	LError
-	LPanic
-	LFatal
-)
-
 var (
 	clients        []*Client
 	sliceTex       sync.Mutex
@@ -142,9 +132,19 @@ func Trace(args ...interface{}) {
 		level:     LTrace,
 	}
 	createLog(e)
-	//	entry := logger.WithFields(logrus.Fields{})
-	//	entry.Data["file"] = fileInfo(2)
-	//	entry.Debug(args...)
+}
+
+// Formatted print for Trace
+func Tracef(format string, args ...interface{}) {
+	output := fmt.Sprintf(format, args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "TRACE",
+		level:     LTrace,
+	}
+	createLog(e)
 }
 
 // Debug prints out logs on debug level
@@ -158,12 +158,37 @@ func Debug(args ...interface{}) {
 		level:     LDebug,
 	}
 	createLog(e)
+}
 
+// Formatted print for Debug
+func Debugf(format string, args ...interface{}) {
+	output := fmt.Sprintf(format, args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "DEBUG",
+		level:     LDebug,
+	}
+	createLog(e)
 }
 
 // Info prints out logs on info level
 func Info(args ...interface{}) {
 	output := fmt.Sprint(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "INFO",
+		level:     LInfo,
+	}
+	createLog(e)
+}
+
+// Formatted print for Info
+func Infof(format string, args ...interface{}) {
+	output := fmt.Sprintf(format, args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
@@ -187,9 +212,35 @@ func Warn(args ...interface{}) {
 	createLog(e)
 }
 
+// Formatted print for Warn
+func Warnf(format string, args ...interface{}) {
+	output := fmt.Sprintf(format, args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "WARN",
+		level:     LWarn,
+	}
+	createLog(e)
+}
+
 // Error prints out logs on error level
 func Error(args ...interface{}) {
 	output := fmt.Sprint(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "ERROR",
+		level:     LError,
+	}
+	createLog(e)
+}
+
+// Formatted print for error
+func Errorf(format string, args ...interface{}) {
+	output := fmt.Sprintf(format, args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
@@ -223,9 +274,47 @@ func Panic(args ...interface{}) {
 	panic(errors.New(output))
 }
 
+// Formatted print for panic
+func Panicf(format string, args ...interface{}) {
+	output := fmt.Sprintf(format, args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "PANIC",
+		level:     LPanic,
+	}
+	createLog(e)
+	if len(args) >= 0 {
+		switch args[0].(type) {
+		case error:
+			panic(args[0])
+		default:
+			// falls through to default below
+		}
+	}
+	Flush()
+	panic(errors.New(output))
+}
+
 // Fatal prints out logs on fatal level
 func Fatal(args ...interface{}) {
 	output := fmt.Sprint(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "FATAL",
+		level:     LFatal,
+	}
+	createLog(e)
+	Flush()
+	os.Exit(1)
+}
+
+// Formatted print for fatal
+func Fatalf(format string, args ...interface{}) {
+	output := fmt.Sprintf(format, args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
