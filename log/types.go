@@ -29,3 +29,6 @@ type Entry struct {
 	Level     string    `json:"level"`
 	level     Level
 }
+
+type Logger struct {
+}
