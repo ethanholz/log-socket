@@ -13,7 +13,7 @@ func (_ Logger) Trace(args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "TRACE",
 		level:     LTrace,
 	}
@@ -26,7 +26,7 @@ func (_ Logger) Tracef(format string, args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "TRACE",
 		level:     LTrace,
 	}
@@ -39,7 +39,7 @@ func (_ Logger) Debug(args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "DEBUG",
 		level:     LDebug,
 	}
@@ -52,7 +52,7 @@ func (_ Logger) Debugf(format string, args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "DEBUG",
 		level:     LDebug,
 	}
@@ -65,7 +65,7 @@ func (_ Logger) Info(args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "INFO",
 		level:     LInfo,
 	}
@@ -78,7 +78,7 @@ func (_ Logger) Infof(format string, args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "INFO",
 		level:     LInfo,
 	}
@@ -91,7 +91,7 @@ func (_ Logger) Notice(args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "NOTICE",
 		level:     LNotice,
 	}
@@ -104,7 +104,7 @@ func (_ Logger) Noticef(format string, args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "NOTICE",
 		level:     LNotice,
 	}
@@ -117,7 +117,7 @@ func (_ Logger) Warn(args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "WARN",
 		level:     LWarn,
 	}
@@ -130,7 +130,7 @@ func (_ Logger) Warnf(format string, args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "WARN",
 		level:     LWarn,
 	}
@@ -143,7 +143,7 @@ func (_ Logger) Error(args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "ERROR",
 		level:     LError,
 	}
@@ -156,7 +156,7 @@ func (_ Logger) Errorf(format string, args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "ERROR",
 		level:     LError,
 	}
@@ -169,7 +169,7 @@ func (_ Logger) Panic(args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "PANIC",
 		level:     LPanic,
 	}
@@ -192,7 +192,7 @@ func (_ Logger) Panicf(format string, args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "PANIC",
 		level:     LPanic,
 	}
@@ -215,7 +215,7 @@ func (_ Logger) Fatal(args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "FATAL",
 		level:     LFatal,
 	}
@@ -230,7 +230,7 @@ func (_ Logger) Fatalf(format string, args ...interface{}) {
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(2),
+		File:      fileInfo(3),
 		Level:     "FATAL",
 		level:     LFatal,
 	}
