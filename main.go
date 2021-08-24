@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/taigrr/log-socket/browser"
-	"github.com/taigrr/log-socket/logger"
+	logger "github.com/taigrr/log-socket/log"
 	"github.com/taigrr/log-socket/ws"
 )
 

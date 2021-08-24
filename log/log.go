@@ -1,4 +1,4 @@
-package logger
+package log
 
 import (
 	"errors"
@@ -200,7 +200,7 @@ func Infof(format string, args ...interface{}) {
 }
 
 // Info prints out logs on info level
-func Noticef(args ...interface{}) {
+func Notice(args ...interface{}) {
 	output := fmt.Sprint(args...)
 	e := Entry{
 		Timestamp: time.Now(),

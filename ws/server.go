@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
-	"github.com/taigrr/log-socket/logger"
+	logger "github.com/taigrr/log-socket/log"
 )
 
 // var addr = flag.String("addr", "localhost:8080", "http service address")
