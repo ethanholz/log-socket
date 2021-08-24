@@ -7,13 +7,17 @@ import (
 	"time"
 )
 
+func (l Logger) SetInfoDepth(depth int) {
+	l.FileInfoDepth = depth
+}
+
 // Trace prints out logs on trace level
-func (_ Logger) Trace(args ...interface{}) {
+func (l Logger) Trace(args ...interface{}) {
 	output := fmt.Sprint(args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "TRACE",
 		level:     LTrace,
 	}
@@ -21,12 +25,12 @@ func (_ Logger) Trace(args ...interface{}) {
 }
 
 // Formatted print for Trace
-func (_ Logger) Tracef(format string, args ...interface{}) {
+func (l Logger) Tracef(format string, args ...interface{}) {
 	output := fmt.Sprintf(format, args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "TRACE",
 		level:     LTrace,
 	}
@@ -34,12 +38,12 @@ func (_ Logger) Tracef(format string, args ...interface{}) {
 }
 
 // Debug prints out logs on debug level
-func (_ Logger) Debug(args ...interface{}) {
+func (l Logger) Debug(args ...interface{}) {
 	output := fmt.Sprint(args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "DEBUG",
 		level:     LDebug,
 	}
@@ -47,12 +51,12 @@ func (_ Logger) Debug(args ...interface{}) {
 }
 
 // Formatted print for Debug
-func (_ Logger) Debugf(format string, args ...interface{}) {
+func (l Logger) Debugf(format string, args ...interface{}) {
 	output := fmt.Sprintf(format, args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "DEBUG",
 		level:     LDebug,
 	}
@@ -60,12 +64,12 @@ func (_ Logger) Debugf(format string, args ...interface{}) {
 }
 
 // Info prints out logs on info level
-func (_ Logger) Info(args ...interface{}) {
+func (l Logger) Info(args ...interface{}) {
 	output := fmt.Sprint(args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "INFO",
 		level:     LInfo,
 	}
@@ -73,12 +77,12 @@ func (_ Logger) Info(args ...interface{}) {
 }
 
 // Formatted print for Info
-func (_ Logger) Infof(format string, args ...interface{}) {
+func (l Logger) Infof(format string, args ...interface{}) {
 	output := fmt.Sprintf(format, args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "INFO",
 		level:     LInfo,
 	}
@@ -86,12 +90,12 @@ func (_ Logger) Infof(format string, args ...interface{}) {
 }
 
 // Info prints out logs on info level
-func (_ Logger) Notice(args ...interface{}) {
+func (l Logger) Notice(args ...interface{}) {
 	output := fmt.Sprint(args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "NOTICE",
 		level:     LNotice,
 	}
@@ -99,12 +103,12 @@ func (_ Logger) Notice(args ...interface{}) {
 }
 
 // Formatted print for Info
-func (_ Logger) Noticef(format string, args ...interface{}) {
+func (l Logger) Noticef(format string, args ...interface{}) {
 	output := fmt.Sprintf(format, args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "NOTICE",
 		level:     LNotice,
 	}
@@ -112,12 +116,12 @@ func (_ Logger) Noticef(format string, args ...interface{}) {
 }
 
 // Warn prints out logs on warn level
-func (_ Logger) Warn(args ...interface{}) {
+func (l Logger) Warn(args ...interface{}) {
 	output := fmt.Sprint(args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "WARN",
 		level:     LWarn,
 	}
@@ -125,12 +129,12 @@ func (_ Logger) Warn(args ...interface{}) {
 }
 
 // Formatted print for Warn
-func (_ Logger) Warnf(format string, args ...interface{}) {
+func (l Logger) Warnf(format string, args ...interface{}) {
 	output := fmt.Sprintf(format, args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "WARN",
 		level:     LWarn,
 	}
@@ -138,12 +142,12 @@ func (_ Logger) Warnf(format string, args ...interface{}) {
 }
 
 // Error prints out logs on error level
-func (_ Logger) Error(args ...interface{}) {
+func (l Logger) Error(args ...interface{}) {
 	output := fmt.Sprint(args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "ERROR",
 		level:     LError,
 	}
@@ -151,12 +155,12 @@ func (_ Logger) Error(args ...interface{}) {
 }
 
 // Formatted print for error
-func (_ Logger) Errorf(format string, args ...interface{}) {
+func (l Logger) Errorf(format string, args ...interface{}) {
 	output := fmt.Sprintf(format, args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "ERROR",
 		level:     LError,
 	}
@@ -164,12 +168,12 @@ func (_ Logger) Errorf(format string, args ...interface{}) {
 }
 
 // Panic prints out logs on panic level
-func (_ Logger) Panic(args ...interface{}) {
+func (l Logger) Panic(args ...interface{}) {
 	output := fmt.Sprint(args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "PANIC",
 		level:     LPanic,
 	}
@@ -187,12 +191,12 @@ func (_ Logger) Panic(args ...interface{}) {
 }
 
 // Formatted print for panic
-func (_ Logger) Panicf(format string, args ...interface{}) {
+func (l Logger) Panicf(format string, args ...interface{}) {
 	output := fmt.Sprintf(format, args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "PANIC",
 		level:     LPanic,
 	}
@@ -210,12 +214,12 @@ func (_ Logger) Panicf(format string, args ...interface{}) {
 }
 
 // Fatal prints out logs on fatal level
-func (_ Logger) Fatal(args ...interface{}) {
+func (l Logger) Fatal(args ...interface{}) {
 	output := fmt.Sprint(args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "FATAL",
 		level:     LFatal,
 	}
@@ -225,12 +229,12 @@ func (_ Logger) Fatal(args ...interface{}) {
 }
 
 // Formatted print for fatal
-func (_ Logger) Fatalf(format string, args ...interface{}) {
+func (l Logger) Fatalf(format string, args ...interface{}) {
 	output := fmt.Sprintf(format, args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
-		File:      fileInfo(3),
+		File:      fileInfo(l.FileInfoDepth),
 		Level:     "FATAL",
 		level:     LFatal,
 	}

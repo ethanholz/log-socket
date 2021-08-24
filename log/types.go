@@ -31,4 +31,5 @@ type Entry struct {
 }
 
 type Logger struct {
+	FileInfoDepth int
 }
