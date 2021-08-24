@@ -199,6 +199,32 @@ func Infof(format string, args ...interface{}) {
 	createLog(e)
 }
 
+// Info prints out logs on info level
+func Noticef(args ...interface{}) {
+	output := fmt.Sprint(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "NOTICE",
+		level:     LNotice,
+	}
+	createLog(e)
+}
+
+// Formatted print for Info
+func Noticef(format string, args ...interface{}) {
+	output := fmt.Sprintf(format, args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "NOTICE",
+		level:     LNotice,
+	}
+	createLog(e)
+}
+
 // Warn prints out logs on warn level
 func Warn(args ...interface{}) {
 	output := fmt.Sprint(args...)

@@ -9,6 +9,7 @@ const (
 	LTrace Level = iota
 	LDebug
 	LInfo
+	LNotice
 	LWarn
 	LError
 	LPanic
