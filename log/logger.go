@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func (l Logger) SetInfoDepth(depth int) {
+func (l *Logger) SetInfoDepth(depth int) {
 	l.FileInfoDepth = depth
 }
 
