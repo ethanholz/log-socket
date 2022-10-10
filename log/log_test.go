@@ -121,6 +121,7 @@ func TestPanic(t *testing.T) {
 	//		entry.Panic(args...)
 	//	}
 }
+
 func TestFlush(t *testing.T) {
 	defer Flush()
 }

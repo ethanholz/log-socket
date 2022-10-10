@@ -2,8 +2,10 @@ package log
 
 import "time"
 
-type LogWriter chan Entry
-type Level int
+type (
+	LogWriter chan Entry
+	Level     int
+)
 
 const (
 	LTrace Level = iota
