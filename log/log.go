@@ -27,15 +27,13 @@ func init() {
 
 func (c *Client) logStdErr() {
 	for {
-		select {
-		case e, more := <-c.writer:
-			if e.level >= c.LogLevel {
-				fmt.Fprintf(os.Stderr, "%s\t%s\t%s\t%s\n", e.Timestamp.String(), e.Level, e.Output, e.File)
-			}
-			if !more {
-				stderrFinished <- true
-				return
-			}
+		e, more := <-c.writer
+		if e.level >= c.LogLevel {
+			fmt.Fprintf(os.Stderr, "%s\t%s\t%s\t%s\n", e.Timestamp.String(), e.Level, e.Output, e.File)
+		}
+		if !more {
+			stderrFinished <- true
+			return
 		}
 	}
 }
