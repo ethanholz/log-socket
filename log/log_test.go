@@ -86,6 +86,15 @@ func TestInfo(t *testing.T) {
 	//	}
 }
 
+// Print prints out logs on info level
+func TestPrint(t *testing.T) {
+	//	if logLevel >= LInfo {
+	//		entry := logger.WithFields(logrus.Fields{})
+	//		entry.Data["file"] = fileInfo(2)
+	//		entry.Info(args...)
+	//	}
+}
+
 // Warn prints out logs on warn level
 func TestWarn(t *testing.T) {
 	//	if logLevel >= LWarn {
@@ -121,6 +130,7 @@ func TestPanic(t *testing.T) {
 	//		entry.Panic(args...)
 	//	}
 }
+
 func TestFlush(t *testing.T) {
 	defer Flush()
 }

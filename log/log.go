@@ -147,6 +147,19 @@ func Tracef(format string, args ...interface{}) {
 	createLog(e)
 }
 
+// Trace prints out logs on trace level with newline
+func Traceln(args ...interface{}) {
+	output := fmt.Sprintln(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "TRACE",
+		level:     LTrace,
+	}
+	createLog(e)
+}
+
 // Debug prints out logs on debug level
 func Debug(args ...interface{}) {
 	output := fmt.Sprint(args...)
@@ -163,6 +176,19 @@ func Debug(args ...interface{}) {
 // Formatted print for Debug
 func Debugf(format string, args ...interface{}) {
 	output := fmt.Sprintf(format, args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "DEBUG",
+		level:     LDebug,
+	}
+	createLog(e)
+}
+
+// Debug prints out logs on debug level with a newline
+func Debugln(args ...interface{}) {
+	output := fmt.Sprintln(args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
@@ -199,6 +225,19 @@ func Infof(format string, args ...interface{}) {
 	createLog(e)
 }
 
+// Info prints out logs on info level with a newline
+func Infoln(args ...interface{}) {
+	output := fmt.Sprintln(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "INFO",
+		level:     LInfo,
+	}
+	createLog(e)
+}
+
 // Info prints out logs on info level
 func Notice(args ...interface{}) {
 	output := fmt.Sprint(args...)
@@ -215,6 +254,19 @@ func Notice(args ...interface{}) {
 // Formatted print for Info
 func Noticef(format string, args ...interface{}) {
 	output := fmt.Sprintf(format, args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "NOTICE",
+		level:     LNotice,
+	}
+	createLog(e)
+}
+
+// Info prints out logs on info level with a newline
+func Noticeln(args ...interface{}) {
+	output := fmt.Sprintln(args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
@@ -251,6 +303,19 @@ func Warnf(format string, args ...interface{}) {
 	createLog(e)
 }
 
+// Newline print for Warn
+func Warnln(args ...interface{}) {
+	output := fmt.Sprintln(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "WARN",
+		level:     LWarn,
+	}
+	createLog(e)
+}
+
 // Error prints out logs on error level
 func Error(args ...interface{}) {
 	output := fmt.Sprint(args...)
@@ -267,6 +332,19 @@ func Error(args ...interface{}) {
 // Formatted print for error
 func Errorf(format string, args ...interface{}) {
 	output := fmt.Sprintf(format, args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "ERROR",
+		level:     LError,
+	}
+	createLog(e)
+}
+
+// Error prints out logs on error level with a newline
+func Errorln(args ...interface{}) {
+	output := fmt.Sprintln(args...)
 	e := Entry{
 		Timestamp: time.Now(),
 		Output:    output,
@@ -323,6 +401,28 @@ func Panicf(format string, args ...interface{}) {
 	panic(errors.New(output))
 }
 
+func Panicln(args ...interface{}) {
+	output := fmt.Sprintln(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "PANIC",
+		level:     LPanic,
+	}
+	createLog(e)
+	if len(args) >= 0 {
+		switch args[0].(type) {
+		case error:
+			panic(args[0])
+		default:
+			// falls through to default below
+		}
+	}
+	Flush()
+	panic(errors.New(output))
+}
+
 // Fatal prints out logs on fatal level
 func Fatal(args ...interface{}) {
 	output := fmt.Sprint(args...)
@@ -351,6 +451,32 @@ func Fatalf(format string, args ...interface{}) {
 	createLog(e)
 	Flush()
 	os.Exit(1)
+}
+
+func Fatalln(args ...interface{}) {
+	output := fmt.Sprintln(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(2),
+		Level:     "FATAL",
+		level:     LFatal,
+	}
+	createLog(e)
+	Flush()
+	os.Exit(1)
+}
+
+func Print(args ...interface{}) {
+	Info(args...)
+}
+
+func Printf(format string, args ...interface{}) {
+	Infof(format, args...)
+}
+
+func Println(args ...interface{}) {
+	Infoln(args...)
 }
 
 // fileInfo for getting which line in which file
