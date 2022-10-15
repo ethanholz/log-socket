@@ -55,8 +55,7 @@ func BenchmarkDebugSerial(b *testing.B) {
 // Trace ensure logs come out in the right order
 func TestOrder(t *testing.T) {
 	testString := "Testing trace: "
-	var c *Client
-	c = CreateClient()
+	c := CreateClient()
 	c.SetLogLevel(LTrace)
 
 	for i := 0; i < 5000; i++ {

@@ -25,7 +25,7 @@ func LogSocketHandler(w http.ResponseWriter, r *http.Request) {
 	logger.Info("Websocket client attached.")
 	for {
 		logEvent := lc.Get()
-		logJSON, err := json.Marshal(logEvent)
+		logJSON, _ := json.Marshal(logEvent)
 		err = c.WriteMessage(websocket.TextMessage, logJSON)
 		if err != nil {
 			logger.Error("write:", err)
