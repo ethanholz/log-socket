@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"log"
 	"net/http"
 	"time"
 
@@ -29,5 +30,9 @@ func main() {
 	http.HandleFunc("/ws", ws.LogSocketHandler)
 	http.HandleFunc("/", browser.LogSocketViewHandler)
 	go generateLogs()
+	dLogger := log.Default()
+	lsLogger := logger.Default()
+	lsLogger.SubLoggers = append(lsLogger.SubLoggers, logger.EnrichLogger(dLogger))
+	lsLogger.Println("This should be printed out twice!")
 	logger.Fatal(http.ListenAndServe(*addr, nil))
 }

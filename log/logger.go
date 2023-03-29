@@ -22,6 +22,9 @@ func (l Logger) Trace(args ...interface{}) {
 		level:     LTrace,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Trace(args...)
+	}
 }
 
 // Formatted print for Trace
@@ -35,6 +38,9 @@ func (l Logger) Tracef(format string, args ...interface{}) {
 		level:     LTrace,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Tracef(format, args...)
+	}
 }
 
 // Trace prints out logs on trace level with newline
@@ -48,6 +54,9 @@ func (l Logger) Traceln(args ...interface{}) {
 		level:     LTrace,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Traceln(args...)
+	}
 }
 
 // Debug prints out logs on debug level
@@ -61,6 +70,9 @@ func (l Logger) Debug(args ...interface{}) {
 		level:     LDebug,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Debug(args...)
+	}
 }
 
 // Formatted print for Debug
@@ -74,6 +86,9 @@ func (l Logger) Debugf(format string, args ...interface{}) {
 		level:     LDebug,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Debugf(format, args...)
+	}
 }
 
 // Info prints out logs on info level
@@ -87,6 +102,9 @@ func (l Logger) Info(args ...interface{}) {
 		level:     LInfo,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Info(args...)
+	}
 }
 
 // Formatted print for Info
@@ -100,6 +118,9 @@ func (l Logger) Infof(format string, args ...interface{}) {
 		level:     LInfo,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Infof(format, args...)
+	}
 }
 
 // Info prints out logs on info level with newline
@@ -113,6 +134,9 @@ func (l Logger) Infoln(args ...interface{}) {
 		level:     LInfo,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Infoln(args...)
+	}
 }
 
 // Notice prints out logs on notice level
@@ -126,6 +150,9 @@ func (l Logger) Notice(args ...interface{}) {
 		level:     LNotice,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Notice(args...)
+	}
 }
 
 // Formatted print for Notice
@@ -139,6 +166,9 @@ func (l Logger) Noticef(format string, args ...interface{}) {
 		level:     LNotice,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Noticef(format, args...)
+	}
 }
 
 // Notice prints out logs on notice level with newline
@@ -152,6 +182,9 @@ func (l Logger) Noticeln(args ...interface{}) {
 		level:     LNotice,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Noticeln(args...)
+	}
 }
 
 // Warn prints out logs on warn level
@@ -165,6 +198,9 @@ func (l Logger) Warn(args ...interface{}) {
 		level:     LWarn,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Warn(args...)
+	}
 }
 
 // Formatted print for Warn
@@ -178,6 +214,9 @@ func (l Logger) Warnf(format string, args ...interface{}) {
 		level:     LWarn,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Warnf(format, args...)
+	}
 }
 
 // Warn prints out logs on warn level with a newline
@@ -191,6 +230,9 @@ func (l Logger) Warnln(args ...interface{}) {
 		level:     LWarn,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Warnln(args...)
+	}
 }
 
 // Error prints out logs on error level
@@ -204,6 +246,9 @@ func (l Logger) Error(args ...interface{}) {
 		level:     LError,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Error(args...)
+	}
 }
 
 // Formatted print for error
@@ -217,6 +262,10 @@ func (l Logger) Errorf(format string, args ...interface{}) {
 		level:     LError,
 	}
 	createLog(e)
+
+	for _, sl := range l.SubLoggers {
+		sl.Errorf(format, args...)
+	}
 }
 
 // Error prints out logs on error level with a new line
@@ -230,6 +279,9 @@ func (l Logger) Errorln(args ...interface{}) {
 		level:     LError,
 	}
 	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Errorln(args...)
+	}
 }
 
 // Panic prints out logs on panic level
@@ -252,6 +304,9 @@ func (l Logger) Panic(args ...interface{}) {
 		}
 	}
 	Flush()
+	for _, sl := range l.SubLoggers {
+		sl.Panic(args...)
+	}
 	panic(errors.New(output))
 }
 
@@ -275,6 +330,9 @@ func (l Logger) Panicf(format string, args ...interface{}) {
 		}
 	}
 	Flush()
+	for _, sl := range l.SubLoggers {
+		sl.Panicf(format, args...)
+	}
 	panic(errors.New(output))
 }
 
@@ -298,6 +356,10 @@ func (l Logger) Panicln(args ...interface{}) {
 		}
 	}
 	Flush()
+
+	for _, sl := range l.SubLoggers {
+		sl.Panicln(args...)
+	}
 	panic(errors.New(output))
 }
 
@@ -313,6 +375,9 @@ func (l Logger) Fatal(args ...interface{}) {
 	}
 	createLog(e)
 	Flush()
+	for _, sl := range l.SubLoggers {
+		sl.Fatal(args...)
+	}
 	os.Exit(1)
 }
 
@@ -328,6 +393,9 @@ func (l Logger) Fatalf(format string, args ...interface{}) {
 	}
 	createLog(e)
 	Flush()
+	for _, sl := range l.SubLoggers {
+		sl.Fatalf(format, args...)
+	}
 	os.Exit(1)
 }
 
@@ -343,20 +411,40 @@ func (l Logger) Fatalln(args ...interface{}) {
 	}
 	createLog(e)
 	Flush()
+	for _, sl := range l.SubLoggers {
+		sl.Fatalln(args...)
+	}
 	os.Exit(1)
 }
 
 // Handles print to info
 func (l Logger) Print(args ...interface{}) {
 	l.Info(args...)
+	for _, sl := range l.SubLoggers {
+		sl.Print(args...)
+	}
 }
 
 // Handles formatted print to info
 func (l Logger) Printf(format string, args ...interface{}) {
 	l.Infof(format, args...)
+	for _, sl := range l.SubLoggers {
+		sl.Printf(format, args...)
+	}
 }
 
 // Handles print to info with new line
 func (l Logger) Println(args ...interface{}) {
-	l.Infoln(args...)
+	output := fmt.Sprintln(args...)
+	e := Entry{
+		Timestamp: time.Now(),
+		Output:    output,
+		File:      fileInfo(l.FileInfoDepth),
+		Level:     "INFO",
+		level:     LInfo,
+	}
+	createLog(e)
+	for _, sl := range l.SubLoggers {
+		sl.Println(args...)
+	}
 }
