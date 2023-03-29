@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+func Default() *Logger {
+	return &Logger{FileInfoDepth: 0}
+}
+
 func (l *Logger) SetInfoDepth(depth int) {
 	l.FileInfoDepth = depth
 }
